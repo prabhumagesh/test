@@ -19,6 +19,10 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             padding: 40px;
+            transition: transform 0.3s ease;
+        }
+        .container:hover {
+            transform: scale(1.02);
         }
         h1 {
             text-align: center;
@@ -47,6 +51,12 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+        }
+        input:invalid {
+            border-color: #e74c3c;
+        }
+        input:valid {
+            border-color: #2ecc71;
         }
         button {
             background-color: #008CBA;
@@ -85,21 +95,79 @@
         td button:hover {
             background-color: #FF4500;
         }
+        td.income {
+            background-color: #d4edda;
+        }
+        td.expense {
+            background-color: #f8d7da;
+        }
         .summary {
             background: #f0f8ff;
             padding: 20px;
             text-align: center;
             border-radius: 10px;
             margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .summary h3 {
             font-size: 24px;
             margin-bottom: 10px;
             color: #008CBA;
         }
-        .icon img {
+        .summary p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .summary p span {
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .summary .highlight {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        .highlight.income {
+            background-color: #d4edda;
+            color: green;
+        }
+        .highlight.expense {
+            background-color: #f8d7da;
+            color: red;
+        }
+        .highlight.balance {
+            background-color: #d1ecf1;
+            color: #17a2b8;
+        }
+        .summary .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .summary .icon img {
+            width: 60px;
             height: 60px;
-            margin-right: 15px;
+            margin-right: 20px;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+            h2 {
+                font-size: 24px;
+            }
+            input, button {
+                font-size: 14px;
+            }
+            table, th, td {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -114,9 +182,9 @@
                 <img src="https://img.icons8.com/color/96/000000/money-bag.png" alt="Income Icon">
             </div>
             <label for="incomeDesc">Description: </label>
-            <input type="text" id="incomeDesc" placeholder="e.g., Salary, Freelance Work">
+            <input type="text" id="incomeDesc" placeholder="e.g., Salary, Freelance Work" required>
             <label for="incomeAmount">Amount (₹): </label>
-            <input type="number" id="incomeAmount" placeholder="Enter amount in INR">
+            <input type="number" id="incomeAmount" placeholder="Enter amount in INR" required>
             <button onclick="addIncome()">Add Income</button>
         </div>
 
@@ -127,9 +195,9 @@
                 <img src="https://img.icons8.com/external-flaticons-flat-flat-icons/64/external-expenses-accounting-flaticons-flat-flat-icons-9.png" alt="Expense Icon">
             </div>
             <label for="expenseDesc">Description: </label>
-            <input type="text" id="expenseDesc" placeholder="e.g., Rent, Groceries">
+            <input type="text" id="expenseDesc" placeholder="e.g., Rent, Groceries" required>
             <label for="expenseAmount">Amount (₹): </label>
-            <input type="number" id="expenseAmount" placeholder="Enter amount in INR">
+            <input type="number" id="expenseAmount" placeholder="Enter amount in INR" required>
             <button onclick="addExpense()">Add Expense</button>
         </div>
 
@@ -166,9 +234,12 @@
         <!-- Summary Section -->
         <div class="summary">
             <h3>Summary</h3>
-            <p>Total Income: ₹<span id="totalIncome">0</span></p>
-            <p>Total Expenses: ₹<span id="totalExpenses">0</span></p>
-            <p>Remaining Balance: ₹<span id="balance">0</span></p>
+            <div class="icon">
+                <img src="https://img.icons8.com/ios/100/000000/ledger.png" alt="Summary Icon">
+            </div>
+            <p>Total Income: <span class="highlight income">₹<span id="totalIncome">0</span></span></p>
+            <p>Total Expenses: <span class="highlight expense">₹<span id="totalExpenses">0</span></span></p>
+            <p>Remaining Balance: <span class="highlight balance">₹<span id="balance">0</span></span></p>
         </div>
     </div>
 
@@ -216,6 +287,7 @@
         function addIncomeRow(desc, amount, dateTime) {
             const table = document.getElementById('incomeTable');
             const row = table.insertRow();
+            row.classList.add('income');
             row.innerHTML = `
                 <td>Income</td>
                 <td>${desc}</td>
@@ -228,6 +300,7 @@
         function addExpenseRow(desc, amount, dateTime) {
             const table = document.getElementById('expenseTable');
             const row = table.insertRow();
+            row.classList.add('expense');
             row.innerHTML = `
                 <td>Expense</td>
                 <td>${desc}</td>
@@ -238,14 +311,14 @@
         }
 
         function deleteIncomeRow(button, amount) {
-            const row = button.parentElement.parentElement;
+            const row = button.closest('tr');
             row.remove();
             totalIncome -= amount;
             updateSummary();
         }
 
         function deleteExpenseRow(button, amount) {
-            const row = button.parentElement.parentElement;
+            const row = button.closest('tr');
             row.remove();
             totalExpenses -= amount;
             updateSummary();
@@ -253,9 +326,9 @@
 
         function updateSummary() {
             const balance = totalIncome - totalExpenses;
-            document.getElementById('totalIncome').textContent = totalIncome.toFixed(2);
-            document.getElementById('totalExpenses').textContent = totalExpenses.toFixed(2);
-            document.getElementById('balance').textContent = balance.toFixed(2);
+            document.getElementById('totalIncome').innerText = totalIncome.toFixed(2);
+            document.getElementById('totalExpenses').innerText = totalExpenses.toFixed(2);
+            document.getElementById('balance').innerText = balance.toFixed(2);
         }
     </script>
 </body>

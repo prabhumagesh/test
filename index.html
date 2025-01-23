@@ -115,8 +115,8 @@
             <button onclick="addExpense()">Add Expense</button>
         </div>
 
-        <!-- Details Section -->
-        <h2>Details</h2>
+        <!-- Income Table Section -->
+        <h2>Income Details</h2>
         <table>
             <thead>
                 <tr>
@@ -126,8 +126,24 @@
                     <th>Date & Time</th>
                 </tr>
             </thead>
-            <tbody id="detailsTable">
-                <!-- Rows will be added here dynamically -->
+            <tbody id="incomeTable">
+                <!-- Income rows will be added here dynamically -->
+            </tbody>
+        </table>
+
+        <!-- Expense Table Section -->
+        <h2>Expense Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Amount (₹)</th>
+                    <th>Date & Time</th>
+                </tr>
+            </thead>
+            <tbody id="expenseTable">
+                <!-- Expense rows will be added here dynamically -->
             </tbody>
         </table>
 
@@ -163,7 +179,7 @@
 
             totalIncome += amount;
             const dateTime = getCurrentDateTime();
-            addRow('Income', desc, amount, dateTime);
+            addIncomeRow(desc, amount, dateTime);
             updateSummary();
             document.getElementById('incomeDesc').value = '';
             document.getElementById('incomeAmount').value = '';
@@ -180,17 +196,28 @@
 
             totalExpenses += amount;
             const dateTime = getCurrentDateTime();
-            addRow('Expense', desc, amount, dateTime);
+            addExpenseRow(desc, amount, dateTime);
             updateSummary();
             document.getElementById('expenseDesc').value = '';
             document.getElementById('expenseAmount').value = '';
         }
 
-        function addRow(type, desc, amount, dateTime) {
-            const table = document.getElementById('detailsTable');
+        function addIncomeRow(desc, amount, dateTime) {
+            const table = document.getElementById('incomeTable');
             const row = table.insertRow();
             row.innerHTML = `
-                <td>${type}</td>
+                <td>Income</td>
+                <td>${desc}</td>
+                <td>₹${amount.toFixed(2)}</td>
+                <td>${dateTime}</td>
+            `;
+        }
+
+        function addExpenseRow(desc, amount, dateTime) {
+            const table = document.getElementById('expenseTable');
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>Expense</td>
                 <td>${desc}</td>
                 <td>₹${amount.toFixed(2)}</td>
                 <td>${dateTime}</td>

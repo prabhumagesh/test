@@ -7,9 +7,10 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #f2f2f2, #d9e8f5);
+            background: linear-gradient(to bottom, #ff7e5f, #feb47b);
             margin: 0;
             padding: 0;
+            color: #333;
         }
         .container {
             max-width: 900px;
@@ -17,23 +18,30 @@
             background: #fff;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            padding: 20px;
+            padding: 40px;
         }
-        h1, h2 {
+        h1 {
             text-align: center;
+            font-size: 36px;
             color: #333;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 15px;
         }
         .section {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
         label {
             font-weight: bold;
             margin: 5px 0;
             display: block;
-            color: #333;
+            color: #555;
         }
         input, button {
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             width: 100%;
             border: 1px solid #ccc;
@@ -41,47 +49,57 @@
             box-sizing: border-box;
         }
         button {
-            background-color: #007bff;
-            color: #fff;
+            background-color: #008CBA;
+            color: white;
+            font-size: 16px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #007B9F;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 30px;
         }
         table, th, td {
             border: 1px solid #ddd;
         }
         th {
-            background-color: #007bff;
+            background-color: #008CBA;
             color: white;
+            padding: 12px;
         }
-        th, td {
+        td {
             padding: 10px;
             text-align: center;
         }
+        td button {
+            background-color: #FF6347;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        td button:hover {
+            background-color: #FF4500;
+        }
         .summary {
-            text-align: center;
-            background: #f7f9fb;
+            background: #f0f8ff;
             padding: 20px;
+            text-align: center;
             border-radius: 10px;
+            margin-top: 30px;
         }
         .summary h3 {
+            font-size: 24px;
             margin-bottom: 10px;
-            color: #007bff;
-        }
-        .icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            color: #008CBA;
         }
         .icon img {
-            height: 50px;
-            margin-right: 10px;
+            height: 60px;
+            margin-right: 15px;
         }
     </style>
 </head>
@@ -124,12 +142,10 @@
                     <th>Description</th>
                     <th>Amount (₹)</th>
                     <th>Date & Time</th>
-                    <th>Action</th> <!-- Added column for delete button -->
+                    <th>Action</th> 
                 </tr>
             </thead>
-            <tbody id="incomeTable">
-                <!-- Income rows will be added here dynamically -->
-            </tbody>
+            <tbody id="incomeTable"></tbody>
         </table>
 
         <!-- Expense Table Section -->
@@ -141,12 +157,10 @@
                     <th>Description</th>
                     <th>Amount (₹)</th>
                     <th>Date & Time</th>
-                    <th>Action</th> <!-- Added column for delete button -->
+                    <th>Action</th> 
                 </tr>
             </thead>
-            <tbody id="expenseTable">
-                <!-- Expense rows will be added here dynamically -->
-            </tbody>
+            <tbody id="expenseTable"></tbody>
         </table>
 
         <!-- Summary Section -->
@@ -162,7 +176,6 @@
         let totalIncome = 0;
         let totalExpenses = 0;
 
-        // Helper function to get the current date and time
         function getCurrentDateTime() {
             const now = new Date();
             const date = now.toLocaleDateString();
@@ -173,12 +186,10 @@
         function addIncome() {
             const desc = document.getElementById('incomeDesc').value;
             const amount = parseFloat(document.getElementById('incomeAmount').value);
-
             if (!desc || isNaN(amount) || amount <= 0) {
                 alert("Please enter a valid description and positive income amount.");
                 return;
             }
-
             totalIncome += amount;
             const dateTime = getCurrentDateTime();
             addIncomeRow(desc, amount, dateTime);
@@ -190,12 +201,10 @@
         function addExpense() {
             const desc = document.getElementById('expenseDesc').value;
             const amount = parseFloat(document.getElementById('expenseAmount').value);
-
             if (!desc || isNaN(amount) || amount <= 0) {
                 alert("Please enter a valid description and positive expense amount.");
                 return;
             }
-
             totalExpenses += amount;
             const dateTime = getCurrentDateTime();
             addExpenseRow(desc, amount, dateTime);

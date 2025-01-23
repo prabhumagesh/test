@@ -124,6 +124,7 @@
                     <th>Description</th>
                     <th>Amount (₹)</th>
                     <th>Date & Time</th>
+                    <th>Action</th> <!-- Added column for delete button -->
                 </tr>
             </thead>
             <tbody id="incomeTable">
@@ -140,6 +141,7 @@
                     <th>Description</th>
                     <th>Amount (₹)</th>
                     <th>Date & Time</th>
+                    <th>Action</th> <!-- Added column for delete button -->
                 </tr>
             </thead>
             <tbody id="expenseTable">
@@ -210,6 +212,7 @@
                 <td>${desc}</td>
                 <td>₹${amount.toFixed(2)}</td>
                 <td>${dateTime}</td>
+                <td><button onclick="deleteIncomeRow(this, ${amount})">Delete</button></td>
             `;
         }
 
@@ -221,7 +224,22 @@
                 <td>${desc}</td>
                 <td>₹${amount.toFixed(2)}</td>
                 <td>${dateTime}</td>
+                <td><button onclick="deleteExpenseRow(this, ${amount})">Delete</button></td>
             `;
+        }
+
+        function deleteIncomeRow(button, amount) {
+            const row = button.parentElement.parentElement;
+            row.remove();
+            totalIncome -= amount;
+            updateSummary();
+        }
+
+        function deleteExpenseRow(button, amount) {
+            const row = button.parentElement.parentElement;
+            row.remove();
+            totalExpenses -= amount;
+            updateSummary();
         }
 
         function updateSummary() {
